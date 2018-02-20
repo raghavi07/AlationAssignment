@@ -4,19 +4,39 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+import com.thoughtworks.selenium.webdriven.commands.IsElementPresent;
+
 public class HomePage {
-	// WebElement categoryDropdown =
-	// driver.findElement(By.id("searchDropdownBox"));
+
+	@FindBy(id = "nav-logo")
+	private WebElement navLogo;
+
+	@FindBy(css = ".nav-searchbar")
+	private WebElement searchBar;
+
+	@FindBy(id = "searchDropdownBox")
+	private WebElement searchDropdown;
+
+	@FindBy(id = "twotabsearchtextbox")
+	private WebElement textBox;
+
+	@FindBy(xpath = "//*[@class='nav-search-submit nav-sprite']/*[@class='nav-input']")
+	private WebElement searchButton;
+
 	WebDriver driver;
 
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
 	public Boolean isHomePageLoaded() {
-		if (driver.findElement(By.id("nav-logo")).isDisplayed()) {
+		if (navLogo.isDisplayed()) {
 			return true;
 		}
 		return false;
@@ -29,23 +49,24 @@ public class HomePage {
 	}
 
 	public Boolean isSearchTextBoxPresent() {
-		if (driver.findElement(By.cssSelector(".nav-searchbar")).isDisplayed()) {
+		if (searchBar.isDisplayed()) {
 			return true;
 		}
 		return false;
 	}
 
 	public void selectProductCategory(String category) {
-		Select oSelect = new Select(driver.findElement(By.id("searchDropdownBox")));
+		Select oSelect = new Select(searchDropdown);
 		oSelect.selectByVisibleText(category);
 	}
 
 	public void enterSearchText(String keyword) {
-		driver.findElement(By.id("twotabsearchtextbox")).sendKeys(keyword);
+		textBox.sendKeys(keyword);
 	}
 
 	public void clickSearchButton() {
-		driver.findElement(By.xpath("//*[@class='nav-search-submit nav-sprite']/*[@class='nav-input']")).click();
+		searchButton.isDisplayed();
+		searchButton.click();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
